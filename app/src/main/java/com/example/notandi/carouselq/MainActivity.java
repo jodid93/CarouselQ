@@ -17,6 +17,9 @@ import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
 
+import java.net.URISyntaxException;
+import java.sql.SQLException;
+
 public class MainActivity extends Activity implements
         PlayerNotificationCallback, ConnectionStateCallback {
 
@@ -33,6 +36,13 @@ public class MainActivity extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        try {
+            DBConnector myDB = new DBConnector();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e){
+            e.getMessage();
+        }
         AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
                 AuthenticationResponse.Type.TOKEN,
                 REDIRECT_URI);
