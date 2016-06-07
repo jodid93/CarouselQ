@@ -26,12 +26,12 @@ public class DBConnector {
 
         try {
 
-            /*this.connection = DriverManager.getConnection(
+            this.connection = DriverManager.getConnection(
                     "jdbc:postgresql://ec2-54-228-226-93.eu-west-1.compute.amazonaws.com:5432/d7135l4obpt6ah", "niifhdogkmbvjv","0xPX5jsIs5W2Zu3wLvHds5inRr");
-            */
 
-            String dbUrl = System.getenv("JDBC_DATABASE_URL");
-            this.connection = DriverManager.getConnection(dbUrl);
+
+            //String dbUrl = System.getenv("JDBC_DATABASE_URL");
+            //this.connection = DriverManager.getConnection(dbUrl);
 
         } catch (SQLException e) {
 
