@@ -6,3 +6,4 @@
 .DS_Store
 /build
 /captures
+/webBackend/node_modules
