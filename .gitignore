@@ -6,5 +6,5 @@
 .DS_Store
 /build
 /captures
-/webBackend/node_modules
 /node_modules
+../backend-carousel-q/node_modules

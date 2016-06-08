@@ -1,8 +1,0 @@
-Name:vefforritun - lokaverkefni1.0
-Host:localhosting
-Port:5432
-Service:
-Maintenance DB: postgres
-Username: lokaverkefni
-Password: 1qaz2wsx
-Group:Serves
