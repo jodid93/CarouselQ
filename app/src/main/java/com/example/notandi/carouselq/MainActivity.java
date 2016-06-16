@@ -23,7 +23,7 @@ import java.sql.SQLException;
 public class MainActivity extends Activity implements
         PlayerNotificationCallback, ConnectionStateCallback {
 
-
+    private DBConnector backendConnector;
     private static final String CLIENT_ID = "63f59894866d46648c5cd2975feea347";
 
     private static final String REDIRECT_URI = "shit-eg-vona-ad-thetta-virki://callback";
@@ -36,20 +36,22 @@ public class MainActivity extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        try {
-            DBConnector myDB = new DBConnector();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e){
-            e.getMessage();
-        }
-        AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
+        context init = context.getInstance();
+        init.init(this.getApplicationContext());
+
+
+        backendConnector = DBConnector.getInstance();
+        backendConnector.testConnection();
+
+        /*AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
                 AuthenticationResponse.Type.TOKEN,
                 REDIRECT_URI);
         builder.setScopes(new String[]{"user-read-private", "streaming"});
         AuthenticationRequest request = builder.build();
 
-        AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
+        AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);*/
+
+
     }
 
     @Override

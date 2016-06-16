@@ -10,7 +10,7 @@ public class urls {
     }
 
     public static String testConnection(){
-        return "";
+        return "http://localhost:8080/testConnection";
     }
 
     //TODO:

@@ -1,6 +1,5 @@
 package com.example.notandi.carouselq;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -21,9 +20,23 @@ public class DBConnector{
 
     private Context appContext;
     private String currentMethod;
+    private static DBConnector instance = null;
 
-    public DBConnector(){
+    /*public DBConnector(){
         this.appContext = new context();
+    }*/
+
+    protected DBConnector() {
+        context wow = context.getInstance();
+        this.appContext = wow.getContext();
+        System.out.println("ekkert vesen her");
+    }
+
+    public static DBConnector getInstance() {
+        if(instance == null) {
+            instance = new DBConnector();
+        }
+        return instance;
     }
 
     public void testConnection() {
@@ -34,7 +47,7 @@ public class DBConnector{
     }
 
     private boolean checkNetwork(){
-        ConnectivityManager connMgr = (ConnectivityManager) this.appContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connMgr = (ConnectivityManager) this.appContext.getSystemService(this.appContext.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             return true;
@@ -71,24 +84,37 @@ public class DBConnector{
         try {
             URL url = new URL(myurl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(10000 /* milliseconds */);
-            conn.setConnectTimeout(15000 /* milliseconds */);
-            conn.setRequestMethod(this.currentMethod);
+
+            //conn.setReadTimeout(10000 /* milliseconds */);
+            //conn.setConnectTimeout(15000 /* milliseconds */);
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/json");
             conn.setDoInput(true);
             // Starts the query
+            System.out.println("URL ID ER HERNA -----"+conn.getURL());
             conn.connect();
-            int response = conn.getResponseCode();
+            if (conn.getResponseCode() != 200) {
+                System.out.println("#################KASTAR EXC###############RESPONSE   "+conn.getResponseMessage());
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + conn.getResponseCode());
+            }else{
+                System.out.println("#################EFTIR###############RESPONSE   "+conn.getResponseMessage());
+            }
             //Log.d(DEBUG_TAG, "The response is: " + response);
-            System.out.println("tenging nadist response is:"+response);
+            //System.out.println("tenging nadist response is-------------------------------------------------:"+response);
+            System.out.println("#################EFTIREFTIR###############   "+conn.getResponseCode());
             is = conn.getInputStream();
-
+            System.out.println("#################EITTHVAD###########");
             // Convert the InputStream into a string
             String contentAsString = readIt(is, len);
+            System.out.println("#################EITTHVAD22222###########"+contentAsString);
             return contentAsString;
 
             // Makes sure that the InputStream is closed after the app is
             // finished using it.
-        } finally {
+        }
+        finally
+        {
             if (is != null) {
                 is.close();
             }

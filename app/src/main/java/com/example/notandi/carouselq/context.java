@@ -9,17 +9,22 @@ import android.content.Context;
 public class context extends Activity {
 
     private static context instance = null;
-    protected context() {
-        // Exists only to defeat instantiation.
-    }
+
+    private context() {       }
+
     public static context getInstance() {
-        if(instance == null) {
-            instance = new context();
+        if (instance == null) {
+            instance = new context ();
         }
         return instance;
     }
 
+    private Context contextInstance;
+    public void init(Context context){
+        this.contextInstance = context.getApplicationContext();
+    }
+
     public Context getContext(){
-        return this.getApplicationContext();
+        return this.contextInstance;
     }
 }
