@@ -16,6 +16,12 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/*
+* for starting my local db run
+* C:\Program Files\PostgreSQL\9.5\bin>pg_ctl start -D "C:\Program Files\PostgreSQL\9.5\data"
+* with cmd Admin
+* */
+
 public class DBConnector{
 
     private Context appContext;
