@@ -36,6 +36,7 @@ public class MainActivity extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //initialize the context class with the context of this activity to use it later
         context init = context.getInstance();
         init.init(this.getApplicationContext());
 

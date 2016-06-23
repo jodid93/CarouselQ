@@ -5,13 +5,21 @@ package com.example.notandi.carouselq;
  */
 public class urls {
 
-    private static String mode = "raun";
+    private static String mode = "dev";
     public static String createUser(String userName){
         return "";
     }
 
     public static String testConnection(){
         return baseService(mode)+"testConnection";
+    }
+
+    public static String registerNewUser(String userName, String hashedUserName, String queueId){
+        return baseService(mode)+"";
+    }
+
+    public static String initializeDB(){
+        return baseService(mode)+"initDB";
     }
 
     //TODO:
