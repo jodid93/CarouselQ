@@ -28,6 +28,7 @@ public class DBConnector{
     private static String currentUrl;
     private static String mMessage;
     private static DBConnector instance = null;
+    private static int BugCounter = 0;
 
     protected DBConnector() {
         context wow = context.getInstance();
@@ -45,6 +46,7 @@ public class DBConnector{
         if(checkNetwork()){
             this.currentMethod = "GET";
             currentUrl = urls.testConnection();
+            debugg(currentUrl);
             AsyncTask<Void,Void,String> task = new FetchDataTask();
             task.execute();
         }
@@ -63,6 +65,7 @@ public class DBConnector{
         if(checkNetwork()){
             this.currentMethod = "GET";
             currentUrl = urls.initializeDB();
+            debugg(currentUrl);
             AsyncTask<Void,Void,String> task = new FetchDataTask();
             task.execute();
         }
@@ -83,6 +86,7 @@ public class DBConnector{
         @Override
         protected String doInBackground(Void... params) {
             String message = new DBConnector().fetchData();
+            debugg(message);
             return message;
         }
 
@@ -93,15 +97,19 @@ public class DBConnector{
     }
 
     public String fetchData() {
+        debugg("fetching data");
         try {
             String url = Uri.parse(currentUrl)
                     .buildUpon()
                     .build().toString();
+            debugg(url);
             String jsonString = getUrlString(url);
+            debugg(jsonString);
             return jsonString;
         } catch (IOException ioe) {
-            debugg(ioe.toString(),55);
+            debugg(ioe.toString());
         }
+        debugg("returning null");
         return null;
     }
 
@@ -112,9 +120,12 @@ public class DBConnector{
     public byte[] getUrlBytes(String urlSpec) throws IOException {
         URL url = new URL(urlSpec);
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+        debugg("nadi ad komast  ad conn");
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
+            debugg("getting input Stream");
             InputStream in = conn.getInputStream();
+            debugg("finished getting input stream");
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 throw new IOException(conn.getResponseMessage() + ": with " + urlSpec);
             }
@@ -125,11 +136,17 @@ public class DBConnector{
             }
             out.close();
             return out.toByteArray();
-        } finally { conn.disconnect(); }
+        }catch (IOException e){
+            debugg(e.toString());
+        }finally {
+            conn.disconnect();
+        }
+        return null;
     }
 
-    private static void debugg(String error, int num){
-        System.out.println("---------------"+error+"----------------"+num);
+    private static void debugg(String error){
+        System.out.println("---------------"+error+"----------------"+BugCounter);
+        BugCounter++;
     }
 
 }
