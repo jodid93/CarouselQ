@@ -71,6 +71,16 @@ public class DBConnector{
         }
     }
 
+    public void testSpotify(){
+        if(checkNetwork()){
+            this.currentMethod = "GET";
+            currentUrl = urls.testSpotify();
+            debugg(currentUrl);
+            AsyncTask<Void,Void,String> task = new FetchDataTask();
+            task.execute();
+        }
+    }
+
     private boolean checkNetwork(){
         ConnectivityManager connMgr = (ConnectivityManager) this.appContext.getSystemService(this.appContext.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -85,6 +95,7 @@ public class DBConnector{
 
         @Override
         protected String doInBackground(Void... params) {
+            debugg("herna");
             String message = new DBConnector().fetchData();
             debugg(message);
             return message;

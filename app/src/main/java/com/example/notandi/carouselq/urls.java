@@ -22,6 +22,10 @@ public class urls {
         return baseService(mode)+"initDB";
     }
 
+    public static String testSpotify(){
+        return "https://api.spotify.com/v1/search?q=tania%20bowra&type=artist";
+    }
+
     //TODO:
     /*
         hér þarf að bæta við aðferðum sem kalla á viðeigandi aðgerðir á bakendanum í gegnum url og skila sögðu url-i

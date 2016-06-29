@@ -1,6 +1,7 @@
 package com.example.notandi.carouselq;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -42,15 +43,15 @@ public class MainActivity extends Activity implements
 
 
         backendConnector = DBConnector.getInstance();
-        backendConnector.testConnection();
+        //backendConnector.testConnection();
 
-        /*AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
+        AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
                 AuthenticationResponse.Type.TOKEN,
                 REDIRECT_URI);
         builder.setScopes(new String[]{"user-read-private", "streaming"});
         AuthenticationRequest request = builder.build();
 
-        AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);*/
+        AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
 
 
     }
@@ -72,6 +73,8 @@ public class MainActivity extends Activity implements
                         mPlayer.addConnectionStateCallback(MainActivity.this);
                         mPlayer.addPlayerNotificationCallback(MainActivity.this);
                         mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
+                        System.out.println("----------------------------------- testa spotify");
+                        backendConnector.testSpotify();
                     }
 
                     @Override
@@ -81,6 +84,11 @@ public class MainActivity extends Activity implements
                 });
             }
         }
+    }
+
+    public static Intent newIntent(Context packageContext){
+        Intent i = new Intent(packageContext, MainActivity.class);
+        return i;
     }
 
     @Override
