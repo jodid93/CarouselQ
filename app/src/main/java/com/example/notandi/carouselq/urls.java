@@ -15,7 +15,7 @@ public class urls {
     }
 
     public static String registerNewUser(String userName, String hashedUserName, String queueId){
-        return baseService(mode)+"";
+        return baseService(mode)+"addNewUser/"+userName+"/"+hashedUserName+"/"+queueId;
     }
 
     public static String initializeDB(){

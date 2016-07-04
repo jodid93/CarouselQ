@@ -26,14 +26,15 @@ public class UserInfo {
     public void registerUser(String UserName){
         this.hashedUserName = makeHashUserName();
         this.userName = UserName;
+        this.queueId = makeQueueID();
     }
 
     public String getUserName(){
-        return this.hashedUserName;
+        return this.userName;
     }
 
     public String getHashedUserName(){
-        return this.userName;
+        return this.hashedUserName;
     }
 
     public String getQueueID(){

@@ -48,11 +48,12 @@ public class HomeScreen extends Activity {
                     Toast.makeText(HomeScreen.this, "Please enter a username", Toast.LENGTH_SHORT).show();
 
                 }else{
-                    //uInfo.registerUser((String) mNewUser.getText());
-                    //backendConnector.registerUser(uInfo.getUserName(), uInfo.getHashedUserName(), uInfo.getQueueID());
+                    uInfo.registerUser(String.valueOf(mNewUser.getText()));
+                    backendConnector.registerUser(uInfo.getUserName(), uInfo.getHashedUserName(), uInfo.getQueueID());
+                    Intent i = MainActivity.newIntent(HomeScreen.this);
+                    startActivityForResult(i, 0);
                 }
-                Intent i = MainActivity.newIntent(HomeScreen.this);
-                startActivityForResult(i, 0);
+
             }
         });
     }
