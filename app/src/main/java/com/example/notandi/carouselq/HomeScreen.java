@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,12 +42,34 @@ public class HomeScreen extends Activity {
         mNewUser = (TextView) findViewById(R.id.user_name_text);
         mQueueID = (TextView) findViewById(R.id.queue_id_text);
 
+        //final ArrayAdapter<String> adapter = new ArrayAdapter<String>(context);
+
         mNewQueue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mNewUser.getText() == null){
-                    Toast.makeText(HomeScreen.this, "Please enter a username", Toast.LENGTH_SHORT).show();
 
+                String queueName = mNewUser.getText().toString();
+                if(queueName == null ||queueName.equals("Name")){
+                    Toast.makeText(HomeScreen.this, "Please enter a username", Toast.LENGTH_SHORT).show();
+                    System.out.println(mNewUser.getText() + "  -------------------------------------");
+                }else{
+                    uInfo.registerUser(String.valueOf(mNewUser.getText()));
+                    backendConnector.registerUser(uInfo.getUserName(), uInfo.getHashedUserName(), uInfo.getQueueID());
+                    Intent i = MainActivity.newIntent(HomeScreen.this);
+                    startActivityForResult(i, 0);
+                }
+
+            }
+        });
+
+        mEnterQueue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String queueName = mNewUser.getText().toString();
+                if(queueName == null ||queueName.equals("Name")){
+                    Toast.makeText(HomeScreen.this, "Please enter a username", Toast.LENGTH_SHORT).show();
+                    System.out.println(mNewUser.getText() + "  -------------------------------------");
                 }else{
                     uInfo.registerUser(String.valueOf(mNewUser.getText()));
                     backendConnector.registerUser(uInfo.getUserName(), uInfo.getHashedUserName(), uInfo.getQueueID());
