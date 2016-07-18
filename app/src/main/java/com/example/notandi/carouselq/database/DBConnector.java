@@ -1,4 +1,4 @@
-package com.example.notandi.carouselq;
+package com.example.notandi.carouselq.database;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -6,14 +6,14 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.notandi.carouselq.activities.context;
 
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 /*
 * for starting my local db run
@@ -41,6 +41,13 @@ public class DBConnector{
         }
         return instance;
     }
+
+    ///////////////////////////////////////////////////////////////
+    //
+    //  NETWORK FUNCTIONS
+    //
+    //////////////////////////////////////////////////////////////
+
 
     public void testConnection() {
         if(checkNetwork()){
@@ -81,6 +88,35 @@ public class DBConnector{
         }
     }
 
+    public boolean doesQueueExist(String queueId){
+        boolean doesExist = false;
+        if(checkNetwork()){
+            this.currentMethod = "GET";
+            currentUrl = urls.doesQueueExist(queueId);
+            AsyncTask<Void, Void, String> task = new FetchDataTask();
+            try {
+                debugg("bid eftir svari fra async method");
+                String message = task.execute().get();
+
+                doesExist = JSONHelper.doesQueueExist(message);
+                debugg(Boolean.toString(doesExist));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        debugg("svar komid i hus og er");
+        debugg(mMessage);
+        return doesExist;
+    }
+
+    ///////////////////////////////////////////////////////////////
+    //
+    //  END OF NETWORK FUNCTIONS
+    //
+    //////////////////////////////////////////////////////////////
+
     private boolean checkNetwork(){
         ConnectivityManager connMgr = (ConnectivityManager) this.appContext.getSystemService(this.appContext.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -95,14 +131,13 @@ public class DBConnector{
 
         @Override
         protected String doInBackground(Void... params) {
-            debugg("herna");
             String message = new DBConnector().fetchData();
-            debugg(message);
             return message;
         }
 
         @Override
         protected void onPostExecute(String message) {
+            debugg("async svaradi post execute: "+message);
             mMessage = message;
         }
     }
@@ -113,9 +148,9 @@ public class DBConnector{
             String url = Uri.parse(currentUrl)
                     .buildUpon()
                     .build().toString();
-            debugg(url);
             String jsonString = getUrlString(url);
             debugg(jsonString);
+            mMessage = jsonString;
             return jsonString;
         } catch (IOException ioe) {
             debugg(ioe.toString());

@@ -1,4 +1,4 @@
-package com.example.notandi.carouselq;
+package com.example.notandi.carouselq.database;
 
 /**
  * Created by Notandi on 15.6.2016.
@@ -24,6 +24,10 @@ public class urls {
 
     public static String testSpotify(){
         return "https://api.spotify.com/v1/search?q=tania%20bowra&type=artist";
+    }
+
+    public static String doesQueueExist(String queueId){
+        return baseService(mode)+ "/doesQueueExist/"+queueId;
     }
 
     //TODO:

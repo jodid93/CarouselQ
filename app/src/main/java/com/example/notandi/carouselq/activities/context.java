@@ -1,4 +1,4 @@
-package com.example.notandi.carouselq;
+package com.example.notandi.carouselq.activities;
 
 import android.app.Activity;
 import android.content.Context;

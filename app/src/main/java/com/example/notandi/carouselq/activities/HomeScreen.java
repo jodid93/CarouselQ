@@ -1,14 +1,16 @@
-package com.example.notandi.carouselq;
+package com.example.notandi.carouselq.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.notandi.carouselq.R;
+import com.example.notandi.carouselq.database.DBConnector;
+import com.example.notandi.carouselq.users.UserInfo;
 
 public class HomeScreen extends Activity {
 
@@ -66,15 +68,19 @@ public class HomeScreen extends Activity {
             @Override
             public void onClick(View v) {
 
-                String queueName = mNewUser.getText().toString();
+                String queueName = mQueueID.getText().toString();
                 if(queueName == null ||queueName.equals("Name")){
-                    Toast.makeText(HomeScreen.this, "Please enter a username", Toast.LENGTH_SHORT).show();
-                    System.out.println(mNewUser.getText() + "  -------------------------------------");
+                    Toast.makeText(HomeScreen.this, "Please enter a queue id", Toast.LENGTH_SHORT).show();
+                    System.out.println(mQueueID.getText() + "  -------------------------------------");
                 }else{
-                    uInfo.registerUser(String.valueOf(mNewUser.getText()));
-                    backendConnector.registerUser(uInfo.getUserName(), uInfo.getHashedUserName(), uInfo.getQueueID());
-                    Intent i = MainActivity.newIntent(HomeScreen.this);
-                    startActivityForResult(i, 0);
+                    //uInfo.registerUser();
+                    if(backendConnector.doesQueueExist(String.valueOf(mQueueID.getText()))){
+                        //TODO register user and add him to the selected queue
+                        Intent i = MainActivity.newIntent(HomeScreen.this);
+                        startActivityForResult(i, 0);
+                    }else{
+                        Toast.makeText(HomeScreen.this, "The selected queue does not exist", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
             }

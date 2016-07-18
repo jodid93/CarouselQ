@@ -1,4 +1,4 @@
-package com.example.notandi.carouselq;
+package com.example.notandi.carouselq.users;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
