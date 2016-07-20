@@ -1,3 +1,4 @@
 [submodule "backend_CarouselQ"]
 	path = backend_CarouselQ
 	url = https://github.com/jodid93/backend_CarouselQ.git
+	branch = master
