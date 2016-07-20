@@ -11,6 +11,7 @@ public class UserInfo {
     private String hashedUserName;
     private String userName;
     private String queueId;
+    private boolean owner;
     static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     private static UserInfo instance = null;
@@ -23,11 +24,16 @@ public class UserInfo {
         return instance;
     }
 
-    public void registerUser(String UserName){
+    public void registerUser(String UserName, boolean owner){
         this.hashedUserName = makeHashUserName();
         this.userName = UserName;
-        this.queueId = makeQueueID();
+        if(owner) {
+            this.queueId = makeQueueID();
+        }
+        this.owner = owner;
     }
+
+    public boolean getOwner() { return this.owner; }
 
     public String getUserName(){
         return this.userName;

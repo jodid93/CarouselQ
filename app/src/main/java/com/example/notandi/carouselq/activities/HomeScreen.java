@@ -18,6 +18,7 @@ public class HomeScreen extends Activity {
     private Button mEnterQueue;
     private TextView mNewUser;
     private TextView mQueueID;
+    private TextView mOldUser;
 
     private static final int ENTER_QUEUE = 0;
     private static final int NEW_QUEUE = 1;
@@ -43,6 +44,7 @@ public class HomeScreen extends Activity {
 
         mNewUser = (TextView) findViewById(R.id.user_name_text);
         mQueueID = (TextView) findViewById(R.id.queue_id_text);
+        mOldUser = (TextView) findViewById(R.id.queue_user_name);
 
         //final ArrayAdapter<String> adapter = new ArrayAdapter<String>(context);
 
@@ -51,12 +53,12 @@ public class HomeScreen extends Activity {
             public void onClick(View v) {
 
                 String queueName = mNewUser.getText().toString();
-                if(queueName == null ||queueName.equals("Name")){
+                if(queueName == null ||queueName.equals("Name")){ //TODO parse input to not allow spaces
                     Toast.makeText(HomeScreen.this, "Please enter a username", Toast.LENGTH_SHORT).show();
                     System.out.println(mNewUser.getText() + "  -------------------------------------");
                 }else{
-                    uInfo.registerUser(String.valueOf(mNewUser.getText()));
-                    backendConnector.registerUser(uInfo.getUserName(), uInfo.getHashedUserName(), uInfo.getQueueID());
+                    uInfo.registerUser(String.valueOf(mNewUser.getText()), true);
+                    backendConnector.registerUser(uInfo.getUserName(), uInfo.getHashedUserName(), uInfo.getQueueID(), uInfo.getOwner());
                     Intent i = MainActivity.newIntent(HomeScreen.this);
                     startActivityForResult(i, 0);
                 }
@@ -73,9 +75,9 @@ public class HomeScreen extends Activity {
                     Toast.makeText(HomeScreen.this, "Please enter a queue id", Toast.LENGTH_SHORT).show();
                     System.out.println(mQueueID.getText() + "  -------------------------------------");
                 }else{
-                    //uInfo.registerUser();
-                    if(backendConnector.doesQueueExist(String.valueOf(mQueueID.getText()))){
-                        //TODO register user and add him to the selected queue
+                    if(backendConnector.doesQueueExist(String.valueOf(mQueueID.getText()))){ //TODO parse input to not allow spaces
+                        uInfo.registerUser(String.valueOf(mOldUser.getText()), false);
+                        backendConnector.registerUser(uInfo.getUserName(), uInfo.getHashedUserName(),String.valueOf(mQueueID.getText()), uInfo.getOwner() );
                         Intent i = MainActivity.newIntent(HomeScreen.this);
                         startActivityForResult(i, 0);
                     }else{

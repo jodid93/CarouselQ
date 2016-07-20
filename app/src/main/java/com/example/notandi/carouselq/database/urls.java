@@ -14,8 +14,8 @@ public class urls {
         return baseService(mode)+"testConnection";
     }
 
-    public static String registerNewUser(String userName, String hashedUserName, String queueId){
-        return baseService(mode)+"addNewUser/"+userName+"/"+hashedUserName+"/"+queueId;
+    public static String registerNewUser(String userName, String hashedUserName, String queueId, boolean owner){
+        return baseService(mode)+"addNewUser/"+userName+"/"+hashedUserName+"/"+queueId+"/"+Boolean.toString(owner);
     }
 
     public static String initializeDB(){

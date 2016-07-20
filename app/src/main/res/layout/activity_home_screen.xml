@@ -14,44 +14,49 @@
         android:layout_height="wrap_content"
         android:text="New Queue"
         android:id="@+id/new_queue_button"
+        android:layout_marginTop="48dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="146dp"
-        android:layout_alignRight="@+id/user_name_text"
-        android:layout_alignEnd="@+id/user_name_text"
-        android:layout_alignLeft="@+id/user_name_text"
-        android:layout_alignStart="@+id/user_name_text" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Enter Queue"
         android:id="@+id/enter_queue_button"
-        android:layout_marginTop="111dp"
-        android:layout_below="@+id/new_queue_button"
+        android:layout_centerVertical="true"
         android:layout_alignLeft="@+id/new_queue_button"
-        android:layout_alignStart="@+id/new_queue_button"
-        android:layout_alignRight="@+id/queue_id_text"
-        android:layout_alignEnd="@+id/queue_id_text" />
+        android:layout_alignStart="@+id/new_queue_button" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:text="User Name"
         android:ems="10"
         android:id="@+id/user_name_text"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/new_queue_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Queue Id"
+        android:ems="10"
         android:id="@+id/queue_id_text"
         android:layout_below="@+id/enter_queue_button"
-        android:layout_alignLeft="@+id/user_name_text"
-        android:layout_alignStart="@+id/user_name_text"
-        android:layout_marginTop="27dp"
-        android:layout_alignRight="@+id/user_name_text"
-        android:layout_alignEnd="@+id/user_name_text"
-        android:text="Queue ID" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="User Name"
+        android:ems="10"
+        android:id="@+id/queue_user_name"
+        android:layout_below="@+id/queue_id_text"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

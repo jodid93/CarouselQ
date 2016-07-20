@@ -59,10 +59,10 @@ public class DBConnector{
         }
     }
 
-    public void registerUser(String userName, String hashedUserName, String queueId){
+    public void registerUser(String userName, String hashedUserName, String queueId, boolean owner){
         if(checkNetwork()){
             this.currentMethod = "SUMBMIT";
-            currentUrl = urls.registerNewUser(userName, hashedUserName, queueId);
+            currentUrl = urls.registerNewUser(userName, hashedUserName, queueId, owner);
             AsyncTask<Void,Void,String> task = new FetchDataTask();
             task.execute();
         }
