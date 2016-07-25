@@ -78,6 +78,7 @@ public class HomeScreen extends Activity {
                     if(backendConnector.doesQueueExist(String.valueOf(mQueueID.getText()))){ //TODO parse input to not allow spaces
                         uInfo.registerUser(String.valueOf(mOldUser.getText()), false);
                         backendConnector.registerUser(uInfo.getUserName(), uInfo.getHashedUserName(),String.valueOf(mQueueID.getText()), uInfo.getOwner() );
+                        uInfo.setQueueId(String.valueOf(mQueueID.getText()));
                         Intent i = MainActivity.newIntent(HomeScreen.this);
                         startActivityForResult(i, 0);
                     }else{

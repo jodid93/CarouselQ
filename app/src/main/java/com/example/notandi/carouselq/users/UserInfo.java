@@ -62,4 +62,8 @@ public class UserInfo {
             sb.append(AB.charAt( rand.nextInt(AB.length()) ) );
         return sb.toString();
     }
+
+    public void setQueueId(String id) {
+        this.queueId = id;
+    }
 }

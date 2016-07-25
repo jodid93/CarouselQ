@@ -5,9 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.notandi.carouselq.R;
 import com.example.notandi.carouselq.database.DBConnector;
+import com.example.notandi.carouselq.users.UserInfo;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
@@ -27,6 +34,11 @@ public class MainActivity extends Activity implements
     private static final String REDIRECT_URI = "shit-eg-vona-ad-thetta-virki://callback";
 
     private static final int REQUEST_CODE = 1337;
+
+    private ListView mSongQueue;
+    private TextView mQueueName;
+    private Button mAddSong;
+    private UserInfo user;
 
     private Player mPlayer;
     @Override
@@ -50,6 +62,29 @@ public class MainActivity extends Activity implements
 
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
 
+        this.mSongQueue = (ListView) findViewById(R.id.songQueue);
+        this.mQueueName = (TextView) findViewById(R.id.queueName);
+        this.mAddSong = (Button) findViewById(R.id.addSong);
+        this.user = UserInfo.getInstance();
+
+        this.mQueueName.setText("Queue Id: "+this.user.getQueueID());
+
+        //test data
+        String[] myStringArray = new String[] {"1","2","3","4","5","6","7","8","9","10","11","12"};
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, myStringArray);
+
+        this.mSongQueue.setAdapter(adapter);
+
+        this.mAddSong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent i = SearchActivity.newIntent(MainActivity.this);
+                startActivityForResult(i, 0);
+            }
+        });
 
     }
 
@@ -69,7 +104,7 @@ public class MainActivity extends Activity implements
                         mPlayer = player;
                         mPlayer.addConnectionStateCallback(MainActivity.this);
                         mPlayer.addPlayerNotificationCallback(MainActivity.this);
-                        mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
+                        //mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
                         System.out.println("----------------------------------- testa spotify");
                         backendConnector.testSpotify();
                     }
