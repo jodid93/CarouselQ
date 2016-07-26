@@ -1,6 +1,15 @@
 package com.example.notandi.carouselq.database;
 
+import android.support.annotation.NonNull;
+
 import org.json.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
 /**
  * Created by Jósúa on 18-Jul-16.
  */
@@ -22,6 +31,39 @@ public class JSONHelper {
 
     private static void debugg(String error){
         System.out.println("---------------"+error+"----------------");
+    }
+
+    public static JSONObject spotifyTest(String message) {
+        try {
+            JSONObject res = new JSONObject(message);
+            return res;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String[] getTracks(JSONObject res) {
+        debugg("eg");
+        debugg("er");
+        debugg("ad");
+        debugg("extracta");
+        debugg("json");
+
+        ArrayList<String> tracks = new ArrayList<String>();
+
+        try {
+            JSONObject items = res.getJSONObject("tracks");
+            JSONArray list = items.getJSONArray("items");
+            for(int i = 0; i < list.length(); i++){
+                JSONObject item = list.getJSONObject(i);
+                debugg(item.getString("name"));
+                tracks.add(item.getString("name"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return tracks.toArray(new String[0]);
     }
 
 

@@ -23,11 +23,15 @@ public class urls {
     }
 
     public static String testSpotify(){
-        return "https://api.spotify.com/v1/search?q=tania%20bowra&type=artist";
+        return "https://api.spotify.com/v1/search?q=Muse&type=track";
     }
 
     public static String doesQueueExist(String queueId){
-        return baseService(mode)+ "/doesQueueExist/"+queueId;
+        return baseService(mode)+ "doesQueueExist/"+queueId;
+    }
+
+    public static String makeUserInactive(String hashUn) {
+        return baseService(mode)+"makeUserInactive/"+hashUn;
     }
 
     //TODO:
@@ -47,4 +51,6 @@ public class urls {
             }
         }
     }
+
+
 }

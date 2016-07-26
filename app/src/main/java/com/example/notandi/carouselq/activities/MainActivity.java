@@ -2,8 +2,11 @@ package com.example.notandi.carouselq.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -14,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.notandi.carouselq.R;
 import com.example.notandi.carouselq.database.DBConnector;
+import com.example.notandi.carouselq.database.JSONHelper;
 import com.example.notandi.carouselq.users.UserInfo;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
@@ -24,6 +28,8 @@ import com.spotify.sdk.android.player.ConnectionStateCallback;
 import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
+
+import org.json.JSONObject;
 
 public class MainActivity extends Activity implements
         PlayerNotificationCallback, ConnectionStateCallback {
@@ -67,13 +73,16 @@ public class MainActivity extends Activity implements
         this.mAddSong = (Button) findViewById(R.id.addSong);
         this.user = UserInfo.getInstance();
 
+        JSONObject res = backendConnector.testSpotify();
+
+        String [] tracks = JSONHelper.getTracks(res);
+
         this.mQueueName.setText("Queue Id: "+this.user.getQueueID());
 
         //test data
-        String[] myStringArray = new String[] {"1","2","3","4","5","6","7","8","9","10","11","12"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, myStringArray);
+                android.R.layout.simple_list_item_1, tracks);
 
         this.mSongQueue.setAdapter(adapter);
 
@@ -104,9 +113,8 @@ public class MainActivity extends Activity implements
                         mPlayer = player;
                         mPlayer.addConnectionStateCallback(MainActivity.this);
                         mPlayer.addPlayerNotificationCallback(MainActivity.this);
-                        //mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
+                        //mPlayer.play("spotify:track:0CQer159JE2DyFd9ZxPKJm");
                         System.out.println("----------------------------------- testa spotify");
-                        backendConnector.testSpotify();
                     }
 
                     @Override
@@ -162,5 +170,37 @@ public class MainActivity extends Activity implements
     protected void onDestroy() {
         Spotify.destroyPlayer(this);
         super.onDestroy();
+        System.out.println("er nuna ad eydinleggja main activity");
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Closing Activity")
+                .setMessage("Are you sure you want to leave this queue?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        backendConnector.makeUserInactive(user.getHashedUserName());
+                        SharedPreferences settings = getSharedPreferences("prefrences", 0);
+                        SharedPreferences.Editor editor = settings.edit();
+                        editor.clear();
+                        editor.commit();
+                        MainActivity.this.onDestroy();
+                        finish();
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+
     }
 }

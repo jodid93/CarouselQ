@@ -8,6 +8,8 @@ import android.os.AsyncTask;
 
 import com.example.notandi.carouselq.activities.context;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -78,14 +80,24 @@ public class DBConnector{
         }
     }
 
-    public void testSpotify(){
+    public JSONObject testSpotify(){
         if(checkNetwork()){
             this.currentMethod = "GET";
             currentUrl = urls.testSpotify();
             debugg(currentUrl);
             AsyncTask<Void,Void,String> task = new FetchDataTask();
-            task.execute();
+            try {
+                debugg("bid eftir svari fra async method");
+                String message = task.execute().get();
+
+                return JSONHelper.spotifyTest(message);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
         }
+        return null;
     }
 
     public boolean doesQueueExist(String queueId){
@@ -111,6 +123,16 @@ public class DBConnector{
         return doesExist;
     }
 
+    public void makeUserInactive(String hashedUserName) {
+        if(checkNetwork()){
+            this.currentMethod = "GET";
+            currentUrl = urls.makeUserInactive(hashedUserName);
+            debugg(currentUrl);
+            AsyncTask<Void,Void,String> task = new FetchDataTask();
+            task.execute();
+        }
+    }
+
     ///////////////////////////////////////////////////////////////
     //
     //  END OF NETWORK FUNCTIONS
@@ -127,6 +149,8 @@ public class DBConnector{
         }
     }
 
+
+
     private class FetchDataTask extends AsyncTask<Void,Void,String> {
 
         @Override
@@ -137,8 +161,8 @@ public class DBConnector{
 
         @Override
         protected void onPostExecute(String message) {
-            debugg("async svaradi post execute: "+message);
-            mMessage = message;
+            //debugg("async svaradi post execute: \n"+message);
+            mMessage = message ;
         }
     }
 
@@ -149,7 +173,6 @@ public class DBConnector{
                     .buildUpon()
                     .build().toString();
             String jsonString = getUrlString(url);
-            debugg(jsonString);
             mMessage = jsonString;
             return jsonString;
         } catch (IOException ioe) {
@@ -176,7 +199,7 @@ public class DBConnector{
                 throw new IOException(conn.getResponseMessage() + ": with " + urlSpec);
             }
             int bytesRead = 0;
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[320000];
             while ((bytesRead = in.read(buffer)) > 0) {
                 out.write(buffer, 0, bytesRead);
             }

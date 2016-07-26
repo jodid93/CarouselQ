@@ -2,6 +2,7 @@ package com.example.notandi.carouselq.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import com.example.notandi.carouselq.database.DBConnector;
 import com.example.notandi.carouselq.users.UserInfo;
 
 public class HomeScreen extends Activity {
+    private String PREFS_NAME = "prefrences";
 
     private Button mNewQueue;
     private Button mEnterQueue;
@@ -30,6 +32,21 @@ public class HomeScreen extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        String UN = settings.getString("Name", "n0th1ngatt4ll");
+
+        if(!UN.equals("n0th1ngatt4ll")){
+            uInfo.setUserName(UN);
+            uInfo.setQueueId(settings.getString("queueId", "n0th1ngatt4ll"));
+            uInfo.setHashedUserName(settings.getString("hashedUN", "n0th1ngatt4ll"));
+            uInfo.setOwner(settings.getBoolean("owner", false));
+
+            Intent i = MainActivity.newIntent(HomeScreen.this);
+            startActivityForResult(i, 0);
+        }
+
 
         context init = context.getInstance();
         init.init(this.getApplicationContext());
@@ -59,6 +76,7 @@ public class HomeScreen extends Activity {
                 }else{
                     uInfo.registerUser(String.valueOf(mNewUser.getText()), true);
                     backendConnector.registerUser(uInfo.getUserName(), uInfo.getHashedUserName(), uInfo.getQueueID(), uInfo.getOwner());
+                    registerPersistantLogIn(uInfo.getUserName(), uInfo.getHashedUserName(),String.valueOf(mQueueID.getText()), uInfo.getOwner() );
                     Intent i = MainActivity.newIntent(HomeScreen.this);
                     startActivityForResult(i, 0);
                 }
@@ -79,6 +97,7 @@ public class HomeScreen extends Activity {
                         uInfo.registerUser(String.valueOf(mOldUser.getText()), false);
                         backendConnector.registerUser(uInfo.getUserName(), uInfo.getHashedUserName(),String.valueOf(mQueueID.getText()), uInfo.getOwner() );
                         uInfo.setQueueId(String.valueOf(mQueueID.getText()));
+                        registerPersistantLogIn(uInfo.getUserName(), uInfo.getHashedUserName(),String.valueOf(mQueueID.getText()), uInfo.getOwner() );
                         Intent i = MainActivity.newIntent(HomeScreen.this);
                         startActivityForResult(i, 0);
                     }else{
@@ -88,5 +107,17 @@ public class HomeScreen extends Activity {
 
             }
         });
+    }
+
+    private void registerPersistantLogIn(String UN, String hashUN, String QID, boolean owner){
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+
+        editor.putString("Name",UN);
+        editor.putString("queueId", QID);
+        editor.putString("hashedUN", hashUN);
+        editor.putBoolean("owner", owner);
+
+        editor.commit();
     }
 }

@@ -66,4 +66,16 @@ public class UserInfo {
     public void setQueueId(String id) {
         this.queueId = id;
     }
+
+    public void setUserName(String un) {
+        this.userName = un;
+    }
+
+    public void setHashedUserName(String hashName) {
+        this.hashedUserName = hashName;
+    }
+
+    public void setOwner(boolean owner) {
+        this.owner = owner;
+    }
 }
