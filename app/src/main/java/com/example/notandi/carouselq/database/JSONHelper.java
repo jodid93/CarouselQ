@@ -2,6 +2,8 @@ package com.example.notandi.carouselq.database;
 
 import android.support.annotation.NonNull;
 
+import com.example.notandi.carouselq.queueController.Track;
+
 import org.json.*;
 
 import java.util.ArrayList;
@@ -43,14 +45,14 @@ public class JSONHelper {
         return null;
     }
 
-    public static String[] getTracks(JSONObject res) {
+    public static ArrayList<Track> getTracks(JSONObject res) {
         debugg("eg");
         debugg("er");
         debugg("ad");
         debugg("extracta");
         debugg("json");
 
-        ArrayList<String> tracks = new ArrayList<String>();
+        ArrayList<Track> tracks = new ArrayList<Track>();
 
         try {
             JSONObject items = res.getJSONObject("tracks");
@@ -58,12 +60,23 @@ public class JSONHelper {
             for(int i = 0; i < list.length(); i++){
                 JSONObject item = list.getJSONObject(i);
                 debugg(item.getString("name"));
-                tracks.add(item.getString("name"));
+                //JSONArray artists = items.getJSONArray("artist");
+                //JSONObject artist = list.getJSONObject(0);
+
+                tracks.add(
+
+                        new Track(
+                                item.getString("uri"),
+                                item.getString("name"),
+                                item.getInt("duration_ms"),
+                                /*artist.getString("name")*/"Muse"
+                        )
+                );
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return tracks.toArray(new String[0]);
+        return tracks;//tracks.toArray(new String[0]);
     }
 
 

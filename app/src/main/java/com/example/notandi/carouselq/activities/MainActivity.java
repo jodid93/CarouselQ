@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.example.notandi.carouselq.R;
 import com.example.notandi.carouselq.database.DBConnector;
 import com.example.notandi.carouselq.database.JSONHelper;
+import com.example.notandi.carouselq.queueController.QController;
+import com.example.notandi.carouselq.queueController.Track;
 import com.example.notandi.carouselq.users.UserInfo;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
@@ -30,6 +32,8 @@ import com.spotify.sdk.android.player.PlayerNotificationCallback;
 import com.spotify.sdk.android.player.PlayerState;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class MainActivity extends Activity implements
         PlayerNotificationCallback, ConnectionStateCallback {
@@ -45,6 +49,7 @@ public class MainActivity extends Activity implements
     private TextView mQueueName;
     private Button mAddSong;
     private UserInfo user;
+    private QController mController;
 
     private Player mPlayer;
     @Override
@@ -73,16 +78,16 @@ public class MainActivity extends Activity implements
         this.mAddSong = (Button) findViewById(R.id.addSong);
         this.user = UserInfo.getInstance();
 
-        JSONObject res = backendConnector.testSpotify();
 
-        String [] tracks = JSONHelper.getTracks(res);
+
+        //String [] tracks = JSONHelper.getTracks(res);
 
         this.mQueueName.setText("Queue Id: "+this.user.getQueueID());
 
         //test data
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, tracks);
+                android.R.layout.simple_list_item_1, new String[]{"fuck","my","asshole"});
 
         this.mSongQueue.setAdapter(adapter);
 
@@ -108,13 +113,18 @@ public class MainActivity extends Activity implements
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
                 Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
                 Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
+
                     @Override
                     public void onInitialized(Player player) {
                         mPlayer = player;
                         mPlayer.addConnectionStateCallback(MainActivity.this);
                         mPlayer.addPlayerNotificationCallback(MainActivity.this);
-                        //mPlayer.play("spotify:track:0CQer159JE2DyFd9ZxPKJm");
+                        System.out.println("hallo");
+                        mPlayer.play("spotify:track:0uH3OXsGFEPLylZyi2S9EJ");
+
+                        mController = new QController(mPlayer);
                         System.out.println("----------------------------------- testa spotify");
+
                     }
 
                     @Override
@@ -158,7 +168,14 @@ public class MainActivity extends Activity implements
 
     @Override
     public void onPlaybackEvent(EventType eventType, PlayerState playerState) {
+
         Log.d("MainActivity", "Playback event received: " + eventType.name());
+
+        if(eventType.name().equals("PAUSE")){
+            JSONObject res = backendConnector.testSpotify();
+            ArrayList<Track> tracks = JSONHelper.getTracks(res);
+            mController.addSongToQueue(tracks);
+        }
     }
 
     @Override
