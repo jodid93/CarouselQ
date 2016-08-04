@@ -111,6 +111,16 @@ public class DBConnector{
         return null;
     }
 
+    public void addSongToQueue(String hashName, String trackUri,String trackName,String trackBand,int trackDur){
+        if(checkNetwork()){
+            this.currentMethod = "SUMBMIT";
+            currentUrl = urls.addSongToQueue(hashName, trackUri, trackName.replaceAll(" ", "+"), trackBand.replaceAll(" ", "+"), trackDur);
+            debugg(currentUrl);
+            AsyncTask<Void,Void,String> task = new FetchDataTask();
+            task.execute();
+        }
+    }
+
     public void registerUser(String userName, String hashedUserName, String queueId, boolean owner){
         if(checkNetwork()){
             this.currentMethod = "SUMBMIT";

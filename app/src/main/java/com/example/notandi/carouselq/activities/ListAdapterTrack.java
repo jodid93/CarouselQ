@@ -68,8 +68,6 @@ public class ListAdapterTrack extends BaseAdapter implements ListAdapter {
             @Override
             public void onClick(View v) {
                 //do something+
-                //TODO kalla a bakenda til ad skra lag i database
-
                 mQController.addSongToQueue(list.get(position));
                 mQController.playIfFirst();
                 notifyDataSetChanged();

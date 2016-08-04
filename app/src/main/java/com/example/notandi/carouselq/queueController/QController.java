@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.example.notandi.carouselq.activities.ListAdapterQueue;
 import com.example.notandi.carouselq.activities.MainActivity;
+import com.example.notandi.carouselq.database.DBConnector;
+import com.example.notandi.carouselq.users.UserInfo;
 import com.spotify.sdk.android.player.Player;
 
 import java.util.ArrayList;
@@ -18,11 +20,15 @@ public class QController {
     private Player mPlayer;
     private ArrayList<Track> tracksList;
     private Context context;
+    private DBConnector mConnector;
+    private UserInfo mUserInfo;
 
     protected QController(Player player,Context context){
         this.mPlayer = player;
         tracksList = new ArrayList<Track>();
         this.context = context;
+        this.mConnector = DBConnector.getInstance();
+        this.mUserInfo = UserInfo.getInstance();
     }
 
     public static QController getInstance(Player player, Context context) {
@@ -61,6 +67,7 @@ public class QController {
         //kalla á gagnagrunn til að setja track inn í db
         //þarf að kalla líka á update queue
 
+        mConnector.addSongToQueue(mUserInfo.getHashedUserName(),track.getUri(),track.getTrackName(),track.getArtistName(),track.getTrackDuration());
         //temp local functionality
         tracksList.add(track);
         updateQueue();

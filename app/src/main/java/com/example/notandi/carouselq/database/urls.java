@@ -38,6 +38,10 @@ public class urls {
         return baseService(mode)+"makeUserInactive/"+hashUn;
     }
 
+    public static String addSongToQueue(String hashName, String trackUri, String trackName, String trackBand, int trackDur){
+        return baseService(mode)+"addSongToQueue/"+hashName+"/"+trackUri+"/"+trackName+"/"+trackBand+"/"+trackDur;
+    }
+
     //TODO:
     /*
         hér þarf að bæta við aðferðum sem kalla á viðeigandi aðgerðir á bakendanum í gegnum url og skila sögðu url-i
