@@ -70,6 +70,7 @@ public class HomeScreen extends Activity {
             public void onClick(View v) {
 
                 String queueName = mNewUser.getText().toString();
+                queueName = queueName.replaceAll(" ", "");
                 if(queueName == null ||queueName.equals("Name")){ //TODO parse input to not allow spaces
                     Toast.makeText(HomeScreen.this, "Please enter a username", Toast.LENGTH_SHORT).show();
                     System.out.println(mNewUser.getText() + "  -------------------------------------");
@@ -89,6 +90,7 @@ public class HomeScreen extends Activity {
             public void onClick(View v) {
 
                 String queueName = mQueueID.getText().toString();
+                queueName = queueName.replaceAll(" ", "");
                 if(queueName == null ||queueName.equals("Name")){
                     Toast.makeText(HomeScreen.this, "Please enter a queue id", Toast.LENGTH_SHORT).show();
                     System.out.println(mQueueID.getText() + "  -------------------------------------");

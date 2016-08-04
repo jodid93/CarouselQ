@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -13,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.notandi.carouselq.R;
 import com.example.notandi.carouselq.database.DBConnector;
@@ -45,7 +45,7 @@ public class MainActivity extends Activity implements
 
     private static final int REQUEST_CODE = 1337;
 
-    private ListView mSongQueue;
+    public static ListView mSongQueue;
     private TextView mQueueName;
     private Button mAddSong;
     private UserInfo user;
@@ -79,23 +79,17 @@ public class MainActivity extends Activity implements
         this.user = UserInfo.getInstance();
 
 
-
-        //String [] tracks = JSONHelper.getTracks(res);
-
         this.mQueueName.setText("Queue Id: "+this.user.getQueueID());
 
-        //test data
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, new String[]{"fuck","my","asshole"});
-
-        this.mSongQueue.setAdapter(adapter);
+        //ListAdapterQueue qAdapter = new ListAdapterQueue(mController.getQueue(), MainActivity.this);
+        //mSongQueue.setAdapter(qAdapter);
 
         this.mAddSong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent i = SearchActivity.newIntent(MainActivity.this);
+                Intent i = SearchActivityMain.newIntent(MainActivity.this);
                 startActivityForResult(i, 0);
             }
         });
@@ -120,9 +114,9 @@ public class MainActivity extends Activity implements
                         mPlayer.addConnectionStateCallback(MainActivity.this);
                         mPlayer.addPlayerNotificationCallback(MainActivity.this);
                         System.out.println("hallo");
-                        mPlayer.play("spotify:track:0uH3OXsGFEPLylZyi2S9EJ");
+                        //mPlayer.play("spotify:track:1vMg9rNGFzdPRBfsp8KSxd");
 
-                        mController = new QController(mPlayer);
+                        mController = QController.getInstance(mPlayer, MainActivity.this);
                         System.out.println("----------------------------------- testa spotify");
 
                     }
@@ -172,9 +166,11 @@ public class MainActivity extends Activity implements
         Log.d("MainActivity", "Playback event received: " + eventType.name());
 
         if(eventType.name().equals("PAUSE")){
-            JSONObject res = backendConnector.testSpotify();
-            ArrayList<Track> tracks = JSONHelper.getTracks(res);
-            mController.addSongToQueue(tracks);
+            mController.popFirst();
+            mController.playNextTrack();
+        }
+        if(eventType.name().equals("PLAY")){
+
         }
     }
 

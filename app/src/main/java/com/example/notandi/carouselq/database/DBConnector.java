@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 
 import com.example.notandi.carouselq.activities.context;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -59,6 +60,55 @@ public class DBConnector{
             AsyncTask<Void,Void,String> task = new FetchDataTask();
             task.execute();
         }
+    }
+
+    public JSONArray lookUp(String Search){
+        JSONArray data = new JSONArray();
+        data.put(lookUp(Search, "track"));
+        data.put(lookUp(Search, "album"));
+        data.put(lookUp(Search, "artist"));
+
+        return data;
+    }
+
+    public JSONObject lookUp(String Search, String type){
+        if(checkNetwork()){
+            this.currentMethod = "GET";
+            currentUrl = urls.getSongs(Search, type);
+            debugg(currentUrl);
+            AsyncTask<Void,Void,String> task = new FetchDataTask();
+            try {
+                debugg("bid eftir svari fra async method");
+                String message = task.execute().get();
+                debugg("svar komid");
+                return JSONHelper.getJSONObject(message);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public JSONObject getAlbumTracks(String url){
+        if(checkNetwork()){
+            this.currentMethod = "GET";
+            currentUrl = url;
+            debugg(currentUrl);
+            AsyncTask<Void,Void,String> task = new FetchDataTask();
+            try {
+                debugg("bid eftir svari fra async method");
+                String message = task.execute().get();
+                debugg("svar komid");
+                return JSONHelper.getJSONObject(message);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     public void registerUser(String userName, String hashedUserName, String queueId, boolean owner){

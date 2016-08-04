@@ -7,10 +7,12 @@ public class Artist {
 
     private String linkToAlbums;
     private String name;
+    private int id;
 
-    public Artist(String link, String name){
+    public Artist(String link, String name, int id){
         this.linkToAlbums = link;
         this.name = name;
+        this.id = id;
     }
 
     //getters
@@ -21,5 +23,9 @@ public class Artist {
 
     public String getName(){
         return this.name;
+    }
+
+    public int getId() {
+        return id;
     }
 }

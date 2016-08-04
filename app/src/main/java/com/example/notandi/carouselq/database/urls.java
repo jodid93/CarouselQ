@@ -26,6 +26,10 @@ public class urls {
         return "https://api.spotify.com/v1/search?q=Muse&type=track";
     }
 
+    public static String getSongs(String Query, String type){
+        return "https://api.spotify.com/v1/search?q="+Query+"&type="+type;
+    }
+
     public static String doesQueueExist(String queueId){
         return baseService(mode)+ "doesQueueExist/"+queueId;
     }

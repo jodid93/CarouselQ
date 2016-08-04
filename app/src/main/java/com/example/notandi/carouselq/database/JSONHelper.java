@@ -2,6 +2,8 @@ package com.example.notandi.carouselq.database;
 
 import android.support.annotation.NonNull;
 
+import com.example.notandi.carouselq.queueController.Album;
+import com.example.notandi.carouselq.queueController.Artist;
 import com.example.notandi.carouselq.queueController.Track;
 
 import org.json.*;
@@ -45,6 +47,16 @@ public class JSONHelper {
         return null;
     }
 
+    public static JSONObject getJSONObject(String message){
+        try {
+            JSONObject res = new JSONObject(message);
+            return res;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static ArrayList<Track> getTracks(JSONObject res) {
         debugg("eg");
         debugg("er");
@@ -60,8 +72,8 @@ public class JSONHelper {
             for(int i = 0; i < list.length(); i++){
                 JSONObject item = list.getJSONObject(i);
                 debugg(item.getString("name"));
-                //JSONArray artists = items.getJSONArray("artist");
-                //JSONObject artist = list.getJSONObject(0);
+                JSONArray artists = item.getJSONArray("artists");
+                JSONObject artist = artists.getJSONObject(0);
 
                 tracks.add(
 
@@ -69,7 +81,8 @@ public class JSONHelper {
                                 item.getString("uri"),
                                 item.getString("name"),
                                 item.getInt("duration_ms"),
-                                /*artist.getString("name")*/"Muse"
+                                artist.getString("name"),
+                                i
                         )
                 );
             }
@@ -77,6 +90,138 @@ public class JSONHelper {
             e.printStackTrace();
         }
         return tracks;//tracks.toArray(new String[0]);
+    }
+
+
+    public static ArrayList<Track> getTracksFromAlbum(JSONObject res) {
+        debugg("eg");
+        debugg("er");
+        debugg("ad");
+        debugg("extracta");
+        debugg("json");
+
+        ArrayList<Track> tracks = new ArrayList<Track>();
+
+        try {
+            JSONArray list = res.getJSONArray("items");
+            for(int i = 0; i < list.length(); i++){
+                JSONObject item = list.getJSONObject(i);
+                debugg(item.getString("name"));
+                JSONArray artists = item.getJSONArray("artists");
+                JSONObject artist = artists.getJSONObject(0);
+
+                tracks.add(
+
+                        new Track(
+                                item.getString("uri"),
+                                item.getString("name"),
+                                item.getInt("duration_ms"),
+                                artist.getString("name"),
+                                i
+                        )
+                );
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return tracks;//tracks.toArray(new String[0]);
+    }
+
+    public static ArrayList<Artist> getArtists(JSONObject res) {
+        debugg("eg");
+        debugg("er");
+        debugg("ad");
+        debugg("extracta");
+        debugg("json");
+
+        ArrayList<Artist> artists = new ArrayList<Artist>();
+
+        try {
+            JSONObject items = res.getJSONObject("artists");
+            JSONArray list = items.getJSONArray("items");
+            for(int i = 0; i < list.length(); i++){
+                JSONObject item = list.getJSONObject(i);
+                debugg(item.getString("name"));
+
+                artists.add(
+
+                        new Artist(
+                                item.getString("href")+"/albums",
+                                item.getString("name"),
+                                i
+                        )
+                );
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return artists;//tracks.toArray(new String[0]);
+    }
+
+    public static ArrayList<Album> getAlbums(JSONObject res) {
+        debugg("eg");
+        debugg("er");
+        debugg("ad");
+        debugg("extracta");
+        debugg("json");
+
+        ArrayList<Album> albums = new ArrayList<Album>();
+
+        try {
+            JSONObject items = res.getJSONObject("albums");
+            JSONArray list = items.getJSONArray("items");
+            for(int i = 0; i < list.length(); i++){
+                JSONObject item = list.getJSONObject(i);
+                debugg(item.getString("name"));
+                //JSONArray artists = item.getJSONArray("artists");
+                //JSONObject artist = artists.getJSONObject(0);
+
+                albums.add(
+
+                        new Album(
+                                item.getString("href"),
+                                item.getString("name"),
+                                i
+                        )
+                );
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return albums;//tracks.toArray(new String[0]);
+    }
+
+
+    public static ArrayList<Album> getAlbumsFromArtist(JSONObject res) {
+        debugg("eg");
+        debugg("er");
+        debugg("ad");
+        debugg("extracta");
+        debugg("json");
+
+        ArrayList<Album> albums = new ArrayList<Album>();
+
+        try {
+            JSONArray list = res.getJSONArray("items");
+            for(int i = 0; i < list.length(); i++){
+                JSONObject item = list.getJSONObject(i);
+                debugg(item.getString("name"));
+                //JSONArray artists = item.getJSONArray("artists");
+                //JSONObject artist = artists.getJSONObject(0);
+
+                albums.add(
+
+                        new Album(
+                                item.getString("href"),
+                                item.getString("name"),
+                                i
+                        )
+                );
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return albums;//tracks.toArray(new String[0]);
     }
 
 
