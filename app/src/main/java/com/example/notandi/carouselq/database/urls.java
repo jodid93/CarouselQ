@@ -5,7 +5,7 @@ package com.example.notandi.carouselq.database;
  */
 public class urls {
 
-    private static String mode = "dev";
+    private static String mode = "raun";
     public static String createUser(String userName){
         return "";
     }
