@@ -5,8 +5,13 @@ import android.content.Context;
 import com.example.notandi.carouselq.activities.ListAdapterQueue;
 import com.example.notandi.carouselq.activities.MainActivity;
 import com.example.notandi.carouselq.database.DBConnector;
+import com.example.notandi.carouselq.database.JSONHelper;
 import com.example.notandi.carouselq.users.UserInfo;
 import com.spotify.sdk.android.player.Player;
+import com.spotify.sdk.android.player.PlayerState;
+import com.spotify.sdk.android.player.PlayerStateCallback;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +51,9 @@ public class QController {
     }
 
     public void updateQueue(){
+
+        ArrayList<Track> queue = mConnector.getQueue(this.mUserInfo.getQueueID());
+        this.tracksList = queue;
         ListAdapterQueue qAdapter = new ListAdapterQueue(tracksList,context);
         MainActivity.mSongQueue.setAdapter(qAdapter);
         //kalla á gagnagrunn og uppfæra tracklist
@@ -59,7 +67,11 @@ public class QController {
     }
 
     public void popFirst(){
-        tracksList.remove(0);
+        if(tracksList.size() >= 1) {
+            mConnector.removeSong(mUserInfo.getHashedUserName(), tracksList.get(0).getUri());
+            tracksList.remove(0);
+        }
+
         updateQueue();
     }
 
@@ -69,14 +81,21 @@ public class QController {
 
         mConnector.addSongToQueue(mUserInfo.getHashedUserName(),track.getUri(),track.getTrackName(),track.getArtistName(),track.getTrackDuration());
         //temp local functionality
-        tracksList.add(track);
         updateQueue();
     }
 
     public void playIfFirst(){
-        if(tracksList.size() == 1){
-            playNextTrack();
-        }
+
+        mPlayer.getPlayerState(new PlayerStateCallback() {
+            @Override
+            public void onPlayerState(PlayerState playerState) {
+                if(tracksList.size() == 1 && !playerState.playing){
+                    playNextTrack();
+                }
+            }
+        });
+
+
     }
 
     public ArrayList<Track> getQueue(){ return this.tracksList; }

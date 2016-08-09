@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.example.notandi.carouselq.queueController.Album;
 import com.example.notandi.carouselq.queueController.Artist;
 import com.example.notandi.carouselq.queueController.Track;
+import com.example.notandi.carouselq.users.UserInfo;
 
 import org.json.*;
 
@@ -13,6 +14,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+
 
 /**
  * Created by Jósúa on 18-Jul-16.
@@ -57,6 +59,16 @@ public class JSONHelper {
         return null;
     }
 
+    public static JSONArray getJSONArray(String message){
+        try {
+            JSONArray res = new JSONArray(message);
+            return res;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static ArrayList<Track> getTracks(JSONObject res) {
         debugg("eg");
         debugg("er");
@@ -82,7 +94,10 @@ public class JSONHelper {
                                 item.getString("name"),
                                 item.getInt("duration_ms"),
                                 artist.getString("name"),
-                                i
+                                i,
+                                UserInfo.getInstance().getUserName(),
+                                0,
+                                UserInfo.getInstance().getHashedUserName()
                         )
                 );
             }
@@ -117,7 +132,10 @@ public class JSONHelper {
                                 item.getString("name"),
                                 item.getInt("duration_ms"),
                                 artist.getString("name"),
-                                i
+                                i,
+                                UserInfo.getInstance().getUserName(),
+                                0,
+                                UserInfo.getInstance().getHashedUserName()
                         )
                 );
             }
@@ -222,6 +240,38 @@ public class JSONHelper {
             e.printStackTrace();
         }
         return albums;//tracks.toArray(new String[0]);
+    }
+
+    public static ArrayList<Track> getQueueFromJSON(JSONArray res) {
+        debugg("eg");
+        debugg("er");
+        debugg("ad");
+        debugg("extracta");
+        debugg("json");
+
+        ArrayList<Track> tracks = new ArrayList<Track>();
+
+        try {
+
+            for(int i = 0; i < res.length(); i++){
+                JSONObject item = res.getJSONObject(i);
+                tracks.add(
+                        new Track(
+                                item.getString("songs_uri"),
+                                item.getString("song_name"),
+                                item.getInt("song_duration"),
+                                item.getString("song_band"),
+                                i,
+                                item.getString("realUserName"),
+                                item.getInt("song_skipvotes"),
+                                item.getString("song_user")
+                        )
+                );
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return tracks;//tracks.toArray(new String[0]);
     }
 
 

@@ -12,13 +12,19 @@ public class Track {
     private int trackDuration;
     private String artistName;
     private int id;
+    private String userName;
+    private int skipvotes;
+    private String userHash;
 
-    public Track(String uri, String name, int dur, String artist, int id){
+    public Track(String uri, String name, int dur, String artist, int id, String user, int skipvotes, String userHash){
         this.uri = uri;
         this.trackName = name;
         this.trackDuration = dur;
         this.artistName = artist;
         this.id = id;
+        this.userName = user;
+        this.skipvotes = skipvotes;
+        this.userHash = userHash;
     }
 
     ///////////////////////////////
@@ -42,4 +48,10 @@ public class Track {
     }
 
     public int getId(){ return this.id; }
+
+    public String getUserName(){ return this.userName; }
+
+    public int getSkipvotes() { return this.skipvotes; }
+
+    public String getuserHash() { return this.userHash; }
 }

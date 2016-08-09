@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 
 import com.example.notandi.carouselq.activities.context;
+import com.example.notandi.carouselq.queueController.Track;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,6 +17,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 /*
@@ -111,6 +113,26 @@ public class DBConnector{
         return null;
     }
 
+    public ArrayList<Track> getQueue(String queueID){
+        if(checkNetwork()){
+            this.currentMethod = "GET";
+            currentUrl = urls.getQueue(queueID);
+            debugg(currentUrl);
+            AsyncTask<Void,Void,String> task = new FetchDataTask();
+            try {
+                debugg("bid eftir svari fra async method");
+                String message = task.execute().get();
+                debugg("svar komid");
+                return JSONHelper.getQueueFromJSON(JSONHelper.getJSONArray(message));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     public void addSongToQueue(String hashName, String trackUri,String trackName,String trackBand,int trackDur){
         if(checkNetwork()){
             this.currentMethod = "SUMBMIT";
@@ -125,6 +147,15 @@ public class DBConnector{
         if(checkNetwork()){
             this.currentMethod = "SUMBMIT";
             currentUrl = urls.registerNewUser(userName, hashedUserName, queueId, owner);
+            AsyncTask<Void,Void,String> task = new FetchDataTask();
+            task.execute();
+        }
+    }
+
+    public void removeSong(String hashUserName, String trackUri){
+        if(checkNetwork()){
+            this.currentMethod = "SUMBMIT";
+            currentUrl = urls.removeSong(hashUserName, trackUri);
             AsyncTask<Void,Void,String> task = new FetchDataTask();
             task.execute();
         }
@@ -232,6 +263,7 @@ public class DBConnector{
             String url = Uri.parse(currentUrl)
                     .buildUpon()
                     .build().toString();
+            debugg(url);
             String jsonString = getUrlString(url);
             mMessage = jsonString;
             return jsonString;

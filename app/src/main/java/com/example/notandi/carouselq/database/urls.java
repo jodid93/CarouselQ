@@ -42,6 +42,14 @@ public class urls {
         return baseService(mode)+"addSongToQueue/"+hashName+"/"+trackUri+"/"+trackName+"/"+trackBand+"/"+trackDur;
     }
 
+    public static String removeSong(String hashName, String trackUri){
+        return baseService(mode) + "removeSong/"+hashName+"/"+trackUri;
+    }
+
+    public static String getQueue(String queueId){
+        return baseService(mode) + "getQueue/"+queueId;
+    }
+
     //TODO:
     /*
         hér þarf að bæta við aðferðum sem kalla á viðeigandi aðgerðir á bakendanum í gegnum url og skila sögðu url-i
