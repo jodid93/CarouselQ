@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by Jósúa on 28-Jul-16.
  * 
- * todo: mQcontroller doesn't seem to initialize when running on the phone. 
+ * todo: mQcontroller doesn't seem to initialize when running on the phone. -- held að vandamálið liggi hjá samsung galaxy s4. virkar á öllum öðrum tækjum
  * todo: add button controll for the admin of the queue and disable all other player activities for non admins
  * todo: find out why the fuck the backend keeps crashing
  * todo: fix the addNewUser method in backend so it stops giving errors
@@ -29,17 +29,17 @@ import java.util.List;
  * todo: set up cloud services
  * todo: FIND OUT WHY THE FUCK EVERYTHING CRASHES ALL THE FUCKING TIME!!!
  * todo: fix the theme and look of the app
- * todo: add many many more try catch for the database functions so that if it crashes the queueid (or the userinfo object for that matter)isn't reset
+ * todo: add many many more try catch for the database functions so that if it crashes the queueid (or the userinfo object for that matter)isn't reset -- done some
  * todo: remember that this is a hobby and try not to go overboard or loose your mind
  */
 public class QController {
 
     private static QController instance = null;
-    private Player mPlayer;
-    private ArrayList<Track> tracksList;
-    private Context context;
-    private DBConnector mConnector;
-    private UserInfo mUserInfo;
+    private static Player mPlayer;
+    private static ArrayList<Track> tracksList;
+    private static Context context;
+    private static DBConnector mConnector;
+    private static UserInfo mUserInfo;
 
     protected QController(Player player,Context context){
         this.mPlayer = player;

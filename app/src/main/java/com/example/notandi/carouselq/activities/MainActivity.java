@@ -127,7 +127,13 @@ public class MainActivity extends Activity implements
                     }
                 });
             }
+            else{
+                System.out.println("-----------------------------------nae ekki ad tengjast spotify 1 --------- "+response.getType());
+            }
+        }else{
+            System.out.println("-----------------------------------nae ekki ad tengjast spotify 2");
         }
+
     }
 
     public static Intent newIntent(Context packageContext){

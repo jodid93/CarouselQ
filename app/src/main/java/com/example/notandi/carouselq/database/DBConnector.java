@@ -275,7 +275,12 @@ public class DBConnector{
     }
 
     public String getUrlString(String urlSpec) throws IOException {
-        return new String(getUrlBytes(urlSpec));
+        try{
+            return new String(getUrlBytes(urlSpec));
+        }catch(Exception e){
+            debugg(e.getMessage());
+            return "";
+        }
     }
 
     public byte[] getUrlBytes(String urlSpec) throws IOException {
