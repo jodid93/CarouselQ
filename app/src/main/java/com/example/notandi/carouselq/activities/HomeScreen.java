@@ -98,6 +98,7 @@ public class HomeScreen extends Activity {
                 }else{
                     if(backendConnector.doesQueueExist(String.valueOf(mQueueID.getText()))){ //TODO parse input to not allow spaces
                         uInfo.registerUser(String.valueOf(mOldUser.getText()), false);
+                        uInfo.setQueueId(String.valueOf(mQueueID.getText()));
                         backendConnector.registerUser(uInfo.getUserName(), uInfo.getHashedUserName(),uInfo.getQueueID(), uInfo.getOwner() );
                         uInfo.setQueueId(String.valueOf(mQueueID.getText()));
                         registerPersistantLogIn(uInfo.getUserName(), uInfo.getHashedUserName(),uInfo.getQueueID(), uInfo.getOwner() );
