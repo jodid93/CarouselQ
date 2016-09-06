@@ -123,7 +123,13 @@ public class DBConnector{
                 debugg("bid eftir svari fra async method");
                 String message = task.execute().get();
                 debugg("svar komid");
-                return JSONHelper.getQueueFromJSON(JSONHelper.getJSONArray(message));
+                JSONArray arr = JSONHelper.getJSONArray(message);
+                if(arr != null){
+                    return JSONHelper.getQueueFromJSON(arr);
+                }else{
+                    return null;
+                }
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -252,7 +258,7 @@ public class DBConnector{
 
         @Override
         protected void onPostExecute(String message) {
-            //debugg("async svaradi post execute: \n"+message);
+            debugg("async svaradi post execute: \n"+message);
             mMessage = message ;
         }
     }
@@ -276,7 +282,9 @@ public class DBConnector{
 
     public String getUrlString(String urlSpec) throws IOException {
         try{
-            return new String(getUrlBytes(urlSpec));
+            String response  = new String(getUrlBytes(urlSpec));
+            System.out.println("#### response is: \n"+response);
+            return response;
         }catch(Exception e){
             debugg(e.getMessage());
             return "";
@@ -296,11 +304,12 @@ public class DBConnector{
                 throw new IOException(conn.getResponseMessage() + ": with " + urlSpec);
             }
             int bytesRead = 0;
-            byte[] buffer = new byte[320000];
+            byte[] buffer = new byte[2048];
             while ((bytesRead = in.read(buffer)) > 0) {
                 out.write(buffer, 0, bytesRead);
             }
             out.close();
+
             return out.toByteArray();
         }catch (IOException e){
             debugg(e.toString());

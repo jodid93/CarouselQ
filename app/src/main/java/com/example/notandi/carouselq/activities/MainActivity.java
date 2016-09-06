@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
 import android.support.v7.app.AlertDialog;
@@ -41,7 +42,7 @@ public class MainActivity extends Activity implements
     private DBConnector backendConnector;
     private static final String CLIENT_ID = "63f59894866d46648c5cd2975feea347";
 
-    private static final String REDIRECT_URI = "shit-eg-vona-ad-thetta-virki://callback";
+    private static final String REDIRECT_URI = "hvaderigangi://callback";
 
     private static final int REQUEST_CODE = 1337;
 
@@ -97,38 +98,95 @@ public class MainActivity extends Activity implements
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Uri uri = intent.getData();
+        if (uri != null) {
+            AuthenticationResponse response = AuthenticationResponse.fromUri(uri);
+            switch (response.getType()) {
+                // Response was successful and contains auth token
+                case TOKEN:
+                    // Handle successful response
+                    Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
+                    Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
+
+                        @Override
+                        public void onInitialized(Player player) {
+                            mPlayer = player;
+                            mPlayer.addConnectionStateCallback(MainActivity.this);
+                            mPlayer.addPlayerNotificationCallback(MainActivity.this);
+                            System.out.println("hallo");
+                            //mPlayer.play("spotify:track:1vMg9rNGFzdPRBfsp8KSxd");
+
+                            mController = QController.getInstance(mPlayer, MainActivity.this);
+                            System.out.println("----------------------------------- testa spotify");
+
+                        }
+
+                        @Override
+                        public void onError(Throwable throwable) {
+                            Log.e("MainActivity", "Could not initialize player: " + throwable.getMessage());
+                        }
+                    });
+                    break;
+
+                // Auth flow returned an error
+                case ERROR:
+                    System.out.println("you fucked now");
+                    break;
+
+                // Most likely auth flow was cancelled
+                default:
+                    // Handle other cases
+            }
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
         // Check if result comes from the correct activity
         if (requestCode == REQUEST_CODE) {
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
+            switch (response.getType()) {
+                // Response was successful and contains auth token
+                case TOKEN:
+                    Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
+                    Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
 
-            if (response.getType() == AuthenticationResponse.Type.TOKEN) {
-                Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
-                Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
+                        @Override
+                        public void onInitialized(Player player) {
+                            mPlayer = player;
+                            mPlayer.addConnectionStateCallback(MainActivity.this);
+                            mPlayer.addPlayerNotificationCallback(MainActivity.this);
+                            System.out.println("hallo");
+                            //mPlayer.play("spotify:track:1vMg9rNGFzdPRBfsp8KSxd");
 
-                    @Override
-                    public void onInitialized(Player player) {
-                        mPlayer = player;
-                        mPlayer.addConnectionStateCallback(MainActivity.this);
-                        mPlayer.addPlayerNotificationCallback(MainActivity.this);
-                        System.out.println("hallo");
-                        //mPlayer.play("spotify:track:1vMg9rNGFzdPRBfsp8KSxd");
+                            mController = QController.getInstance(mPlayer, MainActivity.this);
+                            System.out.println("----------------------------------- testa spotify");
 
-                        mController = QController.getInstance(mPlayer, MainActivity.this);
-                        System.out.println("----------------------------------- testa spotify");
+                        }
 
-                    }
+                        @Override
+                        public void onError(Throwable throwable) {
+                            Log.e("MainActivity", "Could not initialize player: " + throwable.getMessage());
+                        }
+                    });
+                    break;
 
-                    @Override
-                    public void onError(Throwable throwable) {
-                        Log.e("MainActivity", "Could not initialize player: " + throwable.getMessage());
-                    }
-                });
-            }
-            else{
-                System.out.println("-----------------------------------nae ekki ad tengjast spotify 1 --------- "+response.getType());
+                // Auth flow returned an error
+                case ERROR:
+                    final AuthenticationRequest request = new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN, REDIRECT_URI)
+                            .setScopes(new String[]{"user-read-private", "playlist-read", "playlist-read-private", "streaming"})
+                            .build();
+
+                    AuthenticationClient.openLoginInBrowser(this, request);
+                    break;
+
+                // Most likely auth flow was cancelled
+                default:
+                    // Handle other cases
             }
         }else{
             System.out.println("-----------------------------------nae ekki ad tengjast spotify 2");

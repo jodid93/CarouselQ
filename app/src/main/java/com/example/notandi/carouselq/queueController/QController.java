@@ -21,7 +21,7 @@ import java.util.List;
  * 
  * todo: mQcontroller doesn't seem to initialize when running on the phone. -- held að vandamálið liggi hjá samsung galaxy s4. virkar á öllum öðrum tækjum
  * todo: add button controll for the admin of the queue and disable all other player activities for non admins
- * todo: fix the get queues method on the backend. something is terribly broken and is held together with black magic
+ * todo: fix the get queues method on the backend. something is terribly broken and is held together with black magic -- on it -- UPDATE: REMOVE AND RE WRITE. THIS IS SHIIIIIT!!! DONT EVER WRITE CODE AGAIN WHILE DRINKING YOU FUCKING IDIOT!
  * todo: create a better view for the lists in the list adapters. 
  *       add downvote counts, user etc.
  * todo: call the updatequeue method on instantiation of the mainActivity to get an initial queue
@@ -65,6 +65,7 @@ public class QController {
     public void updateQueue(){
 
         ArrayList<Track> queue = mConnector.getQueue(this.mUserInfo.getQueueID());
+        if(queue == null) return;
         this.tracksList = queue;
         ListAdapterQueue qAdapter = new ListAdapterQueue(tracksList,context);
         MainActivity.mSongQueue.setAdapter(qAdapter);
