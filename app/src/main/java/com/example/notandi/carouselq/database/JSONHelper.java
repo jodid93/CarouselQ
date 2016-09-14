@@ -257,10 +257,10 @@ public class JSONHelper {
                 JSONObject item = res.getJSONObject(i);
                 tracks.add(
                         new Track(
-                                item.getString("songs_uri"),
-                                item.getString("song_name"),
-                                item.getInt("song_duration"),
-                                item.getString("song_band"),
+                                item.getString("songUri"),
+                                item.getString("songName"),
+                                item.getInt("songDuration"),
+                                item.getString("songBand"),
                                 i,
                                 item.getString("realUserName"),
                                 item.getInt("song_skipvotes"),

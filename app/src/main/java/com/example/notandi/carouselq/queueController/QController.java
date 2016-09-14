@@ -19,9 +19,9 @@ import java.util.List;
 /**
  * Created by Jósúa on 28-Jul-16.
  * 
- * todo: mQcontroller doesn't seem to initialize when running on the phone. -- held að vandamálið liggi hjá samsung galaxy s4. virkar á öllum öðrum tækjum
+ * done: mQcontroller doesn't seem to initialize when running on the phone. -- held að vandamálið liggi hjá samsung galaxy s4. virkar á öllum öðrum tækjum
  * todo: add button controll for the admin of the queue and disable all other player activities for non admins
- * todo: fix the get queues method on the backend. something is terribly broken and is held together with black magic -- on it -- UPDATE: REMOVE AND RE WRITE. THIS IS SHIIIIIT!!! DONT EVER WRITE CODE AGAIN WHILE DRINKING YOU FUCKING IDIOT! -- final comment. backend is fixed and needs to be connected again to the front end (minor tweeks, mainly the same response from server)
+ * done: fix the get queues method on the backend. something is terribly broken and is held together with black magic -- on it -- UPDATE: REMOVE AND RE WRITE. THIS IS SHIIIIIT!!! DONT EVER WRITE CODE AGAIN WHILE DRINKING YOU FUCKING IDIOT! -- final comment. backend is fixed and needs to be connected again to the front end (minor tweeks, mainly the same response from server)
  * todo: create a better view for the lists in the list adapters. 
  *       add downvote counts, user etc.
  * todo: call the updatequeue method on instantiation of the mainActivity to get an initial queue
