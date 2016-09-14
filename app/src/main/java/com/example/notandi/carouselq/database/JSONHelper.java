@@ -262,9 +262,9 @@ public class JSONHelper {
                                 item.getInt("songDuration"),
                                 item.getString("songBand"),
                                 i,
-                                item.getString("realUserName"),
-                                item.getInt("song_skipvotes"),
-                                item.getString("song_user")
+                                item.getString("userName"),
+                                item.getInt("songSkips"),
+                                item.getString("userHash")
                         )
                 );
             }

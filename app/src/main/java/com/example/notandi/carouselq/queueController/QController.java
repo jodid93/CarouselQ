@@ -30,6 +30,8 @@ import java.util.List;
  * todo: fix the theme and look of the app
  * todo: add many many more try catch for the database functions so that if it crashes the queueid (or the userinfo object for that matter)isn't reset -- done some
  * todo: remember that this is a hobby and try not to go overboard or loose your mind
+ * todo: find out better connections between queues on different phones, that is, update queue display
+ * todo: reverse the order in which the songs queue on the backend
  */
 public class QController {
 
@@ -48,9 +50,24 @@ public class QController {
         this.mUserInfo = UserInfo.getInstance();
     }
 
+    protected QController(Context context){
+        this.mPlayer = null;
+        tracksList = new ArrayList<Track>();
+        this.context = context;
+        this.mConnector = DBConnector.getInstance();
+        this.mUserInfo = UserInfo.getInstance();
+    }
+
     public static QController getInstance(Player player, Context context) {
         if(instance == null) {
             instance = new QController(player, context);
+        }
+        return instance;
+    }
+
+    public static QController getInstance(Context context) {
+        if(instance == null) {
+            instance = new QController(context);
         }
         return instance;
     }
@@ -72,9 +89,18 @@ public class QController {
         //kalla á gagnagrunn og uppfæra tracklist
     }
 
+    public void updateQueue(ArrayList<Track> queue){
+
+        if(queue == null) return;
+        this.tracksList = queue;
+        ListAdapterQueue qAdapter = new ListAdapterQueue(tracksList,context);
+        MainActivity.mSongQueue.setAdapter(qAdapter);
+        //kalla á gagnagrunn og uppfæra tracklist
+    }
+
     public void playNextTrack(){
         //nota mPlayer til að kalla á næsta lag
-        if(tracksList.size() >= 1){
+        if(tracksList.size() >= 1 && mUserInfo.getOwner()){
             mPlayer.play(tracksList.get(0).getUri());
         }
     }
@@ -92,23 +118,22 @@ public class QController {
         //kalla á gagnagrunn til að setja track inn í db
         //þarf að kalla líka á update queue
 
-        mConnector.addSongToQueue(mUserInfo.getHashedUserName(),track.getUri(),track.getTrackName(),track.getArtistName(),track.getTrackDuration());
+        ArrayList<Track> queue = mConnector.addSongToQueueAndUpdate(mUserInfo.getHashedUserName(),track.getUri(),track.getTrackName(),track.getArtistName(),track.getTrackDuration(), mUserInfo.getQueueID());
         //temp local functionality
-        updateQueue();
+        updateQueue(queue);
     }
 
     public void playIfFirst(){
-
-        mPlayer.getPlayerState(new PlayerStateCallback() {
-            @Override
-            public void onPlayerState(PlayerState playerState) {
-                if(tracksList.size() == 1 && !playerState.playing){
-                    playNextTrack();
+        if(mUserInfo.getOwner()){
+            mPlayer.getPlayerState(new PlayerStateCallback() {
+                @Override
+                public void onPlayerState(PlayerState playerState) {
+                    if(tracksList.size() == 1 && !playerState.playing){
+                        playNextTrack();
+                    }
                 }
-            }
-        });
-
-
+            });
+        }
     }
 
     public ArrayList<Track> getQueue(){ return this.tracksList; }

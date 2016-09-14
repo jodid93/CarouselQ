@@ -149,6 +149,27 @@ public class DBConnector{
         }
     }
 
+    public ArrayList<Track> addSongToQueueAndUpdate(String hashName, String trackUri,String trackName,String trackBand,int trackDur, String queueId){
+        if(checkNetwork()){
+            this.currentMethod = "SUMBMIT";
+            currentUrl = urls.addSongToQueue(hashName, trackUri, trackName.replaceAll(" ", "+"), trackBand.replaceAll(" ", "+"), trackDur);
+            debugg(currentUrl);
+            AsyncTask<Void,Void,String> task = new FetchDataTask();
+            try {
+                debugg("bid eftir svari fra async method");
+                String message = task.execute().get();
+                debugg("svar komid, aetla ad updatea queue");
+                return getQueue(queueId);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     public void registerUser(String userName, String hashedUserName, String queueId, boolean owner){
         if(checkNetwork()){
             this.currentMethod = "SUMBMIT";

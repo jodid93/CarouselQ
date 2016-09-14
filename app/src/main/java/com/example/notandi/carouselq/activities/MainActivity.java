@@ -62,22 +62,26 @@ public class MainActivity extends Activity implements
         context init = context.getInstance();
         init.init(this.getApplicationContext());
 
-
+        System.out.println("--------------------------------- nuna er eg herna marrafaccca");
         backendConnector = DBConnector.getInstance();
-        //backendConnector.testConnection();
 
-        AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
-                AuthenticationResponse.Type.TOKEN,
-                REDIRECT_URI);
-        builder.setScopes(new String[]{"user-read-private", "streaming"});
-        AuthenticationRequest request = builder.build();
+        this.user = UserInfo.getInstance();
+        if(this.user.getOwner()){
+            AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
+                    AuthenticationResponse.Type.TOKEN,
+                    REDIRECT_URI);
+            builder.setScopes(new String[]{"user-read-private", "streaming"});
+            AuthenticationRequest request = builder.build();
 
-        AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
+            AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
+        }else{
+            mController = QController.getInstance(MainActivity.this);
+        }
 
         this.mSongQueue = (ListView) findViewById(R.id.songQueue);
         this.mQueueName = (TextView) findViewById(R.id.queueName);
         this.mAddSong = (Button) findViewById(R.id.addSong);
-        this.user = UserInfo.getInstance();
+
 
 
         this.mQueueName.setText("Queue Id: "+this.user.getQueueID());
@@ -115,11 +119,8 @@ public class MainActivity extends Activity implements
                             mPlayer = player;
                             mPlayer.addConnectionStateCallback(MainActivity.this);
                             mPlayer.addPlayerNotificationCallback(MainActivity.this);
-                            System.out.println("hallo");
-                            //mPlayer.play("spotify:track:1vMg9rNGFzdPRBfsp8KSxd");
 
                             mController = QController.getInstance(mPlayer, MainActivity.this);
-                            System.out.println("----------------------------------- testa spotify");
 
                         }
 
@@ -147,7 +148,7 @@ public class MainActivity extends Activity implements
         super.onActivityResult(requestCode, resultCode, intent);
 
         // Check if result comes from the correct activity
-        if (requestCode == REQUEST_CODE) {
+        if (requestCode == REQUEST_CODE && mPlayer == null) {
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
             switch (response.getType()) {
                 // Response was successful and contains auth token
@@ -160,8 +161,6 @@ public class MainActivity extends Activity implements
                             mPlayer = player;
                             mPlayer.addConnectionStateCallback(MainActivity.this);
                             mPlayer.addPlayerNotificationCallback(MainActivity.this);
-                            System.out.println("hallo");
-                            //mPlayer.play("spotify:track:1vMg9rNGFzdPRBfsp8KSxd");
 
                             mController = QController.getInstance(mPlayer, MainActivity.this);
                             System.out.println("----------------------------------- testa spotify");
@@ -188,7 +187,7 @@ public class MainActivity extends Activity implements
                 default:
                     // Handle other cases
             }
-        }else{
+        }else if(mPlayer == null){
             System.out.println("-----------------------------------nae ekki ad tengjast spotify 2");
         }
 
