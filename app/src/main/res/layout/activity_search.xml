@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/serchInput"
                 android:layout_weight="0.67"
-                android:text="Enter search criteria" />
+                android:hint="Enter search criteria" />
 
             <Button
                 style="?android:attr/buttonStyleSmall"

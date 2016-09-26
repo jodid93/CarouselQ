@@ -31,7 +31,7 @@ import java.util.List;
  * todo: add many many more try catch for the database functions so that if it crashes the queueid (or the userinfo object for that matter)isn't reset -- done some
  * todo: remember that this is a hobby and try not to go overboard or loose your mind
  * todo: find out better connections between queues on different phones, that is, update queue display
- * todo: reverse the order in which the songs queue on the backend
+ * todo: reverse the order in which the songs queue on the backend -- done
  */
 public class QController {
 

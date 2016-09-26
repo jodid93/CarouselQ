@@ -31,18 +31,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="User Name"
+        android:hint="User Name"
         android:ems="10"
         android:id="@+id/user_name_text"
         android:layout_below="@+id/new_queue_button"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="44dp" />
+        android:layout_marginTop="44dp"
+        android:clickable="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Queue Id"
+        android:hint="Queue Id"
         android:ems="10"
         android:id="@+id/queue_id_text"
         android:layout_below="@+id/enter_queue_button"
@@ -53,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="User Name"
+        android:hint="User Name"
         android:ems="10"
         android:id="@+id/queue_user_name"
         android:layout_below="@+id/queue_id_text"
